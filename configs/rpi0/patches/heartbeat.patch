@@ -1,0 +1,22 @@
+--- a/arch/arm/boot/dts/bcm2708-rpi-0-w.dts	2018-11-30 23:46:36.656912915 +0800
++++ b/arch/arm/boot/dts/bcm2708-rpi-0-w.dts	2018-11-30 23:50:42.030444798 +0800
+@@ -144,7 +144,7 @@
+ &leds {
+ 	act_led: act {
+ 		label = "led0";
+-		linux,default-trigger = "mmc0";
++		linux,default-trigger = "heartbeat";
+ 		gpios = <&gpio 47 0>;
+ 	};
+ };
+--- a/arch/arm/boot/dts/bcm2708-rpi-b-plus.dts	2018-11-30 23:46:36.656912915 +0800
++++ b/arch/arm/boot/dts/bcm2708-rpi-b-plus.dts	2018-11-30 23:50:42.030444798 +0800
+@@ -90,7 +90,7 @@
+ &leds {
+ 	act_led: act {
+ 		label = "led0";
+-		linux,default-trigger = "mmc0";
++		linux,default-trigger = "heartbeat";
+ 		gpios = <&gpio 47 0>;
+ 	};
+ };

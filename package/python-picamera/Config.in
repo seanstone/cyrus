@@ -1,0 +1,3 @@
+config BR2_PACKAGE_PYTHON_PICAMERA
+        bool "python-picamera"
+        depends on BR2_PACKAGE_PYTHON3

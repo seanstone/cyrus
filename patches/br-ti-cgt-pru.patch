@@ -1,0 +1,37 @@
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
+deleted file mode 100644
+index 1975d8d1e6..0000000000
+--- a/package/ti-cgt-pru/ti-cgt-pru.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Locally calculated
+-sha256	7dc37fd689d1d506bf410d2a00af658b93a58d4bc10ac32c2210129dab617377	ti_cgt_pru_2.2.1_linux_installer_x86.bin
+-sha256	eb646f4f8b14351110992b40ba24d12803bcc150a76e7298705f51088b0a09cc	PRU_Code_Generation_Tools_2.2.x_manifest.html
+-sha256	6b98f9262abd1ae9a3731e6feee02a56b6e290542dea119eeeeaf88bf802aabc	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+index 3665d2cec8..4fbebfb4d7 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.mk
++++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+@@ -5,20 +5,13 @@
+ ################################################################################
+ 
+ TI_CGT_PRU_VERSION = 2.2.1
+-TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
+-TI_CGT_PRU_SITE = http://downloads.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
++TI_CGT_PRU_SITE = https://github.com/seanstone/ti-cgt-pru.git
++TI_CGT_PRU_SITE_METHOD = git
+ TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
+ 	BSL-1.0 (compiler), BSD-2-Clause, BSD-3-Clause, MIT, AFL-3.0, Hewlett-Packard (PRU library)
+ TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.2.x_manifest.html \
+ 	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
+ 
+-define HOST_TI_CGT_PRU_EXTRACT_CMDS
+-	chmod +x $(HOST_TI_CGT_PRU_DL_DIR)/$(TI_CGT_PRU_SOURCE)
+-	$(HOST_TI_CGT_PRU_DL_DIR)/$(TI_CGT_PRU_SOURCE) --prefix $(@D) --mode unattended
+-	mv $(@D)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)/* $(@D)
+-	rmdir $(@D)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)/
+-endef
+-
+ # Since this is largely prebuilt toolchain and likes to live in its
+ # own directory, put it in $(HOST_DIR)/share/ti-cgt-pru/.
+ # Packages wanting to use this toolchain need to use this path as TI's

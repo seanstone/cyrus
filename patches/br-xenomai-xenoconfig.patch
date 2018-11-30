@@ -1,0 +1,17 @@
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 6bf08edfbc..5f1455d59f 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -155,4 +155,12 @@ endef
+ XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_INSTALL_UDEV_RULES
+ endif # udev
+ 
++define XENOMAI_INSTALL_XENO_CONFIG
++	$(INSTALL) -D -m 0755 $(@D)/scripts/xeno-config $(HOST_DIR)/bin/
++	mkdir -p $(HOST_DIR)/usr/include/xenomai
++	cp -r $(@D)/include/* $(HOST_DIR)/usr/include/xenomai/
++endef
++
++XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_INSTALL_XENO_CONFIG
++
+ $(eval $(autotools-package))

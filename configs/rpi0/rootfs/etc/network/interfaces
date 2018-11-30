@@ -1,0 +1,5 @@
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up modprobe brcmfmac && wpa_supplicant -B -iwlan0 -c/etc/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+    wait-delay 15

@@ -1,0 +1,6 @@
+config BR2_PACKAGE_LIBCBOR
+        bool "libcbor"
+        help
+          libcbor is a C library for parsing and generating CBOR, the general-purpose schema-less binary data format.
+
+          https://github.com/PJK/libcbor

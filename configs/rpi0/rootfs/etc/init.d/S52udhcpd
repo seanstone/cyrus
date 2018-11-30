@@ -1,0 +1,20 @@
+#!/bin/sh
+
+export USB0_SUBNET=210
+
+ifconfig usb0 192.168.${USB0_SUBNET}.1 netmask 255.255.255.0 up
+route add -net default gw 192.168.${USB0_SUBNET}.100 metric 20
+
+echo "
+start           192.168.${USB0_SUBNET}.100
+end             192.168.${USB0_SUBNET}.100
+interface       usb0
+opt     dns     192.168.${USB0_SUBNET}.100
+opt     subnet  255.255.255.0
+opt     router  192.168.${USB0_SUBNET}.100
+opt     wins    192.168.${USB0_SUBNET}.100
+opt     domain  local
+opt     lease   864000
+" > /etc/udhcpd.conf
+
+udhcpd

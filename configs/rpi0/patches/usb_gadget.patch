@@ -1,0 +1,20 @@
+--- a/arch/arm/boot/dts/bcm270x.dtsi
++++ b/arch/arm/boot/dts/bcm270x.dtsi
+@@ -115,11 +115,12 @@
+ 		};
+ 
+ 		usb@7e980000 { /* usb */
+-			compatible = "brcm,bcm2708-usb";
+-			reg = <0x7e980000 0x10000>,
+-			      <0x7e006000 0x1000>;
+-			interrupts = <2 0>,
+-				     <1 9>;
++			compatible = "brcm,bcm2835-usb";
++	        reg = <0x7e980000 0x10000>;
++	        interrupts = <1 9>;
++	        g-np-tx-fifo-size = <32>;
++	        g-rx-fifo-size = <256>;
++	        g-tx-fifo-size = <256 128 128 64 64 64 32>;
+ 		};
+ 
+ 		v3d@7ec00000 { /* vd3 */

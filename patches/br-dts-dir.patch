@@ -1,0 +1,42 @@
+diff --git a/linux/Config.in b/linux/Config.in
+index cd91df6771..04ef0f5bff 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -384,6 +384,11 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	  You can provide a list of dts paths to copy and
+ 	  build, separated by spaces.
+ 
++config BR2_LINUX_KERNEL_CUSTOM_DTS_DIR
++	string "Out-of-tree Device Tree Source directory"
++	help
++	  Directory to to out-of-tree device tree source files.
++
+ endif
+ 
+ config BR2_LINUX_KERNEL_DTS_OVERLAYS_SUPPORT
+diff --git a/linux/linux.mk b/linux/linux.mk
+index a3c1df9072..3b4d354996 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -153,7 +153,9 @@ LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+ # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+ # copied to arch/<arch>/boot/dts, but only the .dts files will
+ # actually be generated as .dtb.
+-LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
++CUSTOM_DTS_PATH := $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)
++CUSTOM_DTS_PATH += $(shell find $(BR2_LINUX_KERNEL_CUSTOM_DTS_DIR) -type f -name '*.dts*')
++LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(CUSTOM_DTS_PATH)))))
+ 
+ LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME))
+ 
+@@ -414,9 +416,7 @@ endif
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+-	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+-		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+-	)
++	cp -f $(call qstrip,$(CUSTOM_DTS_PATH)) $(LINUX_ARCH_PATH)/boot/dts/ || true
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
+ 		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ; \

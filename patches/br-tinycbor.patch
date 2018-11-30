@@ -1,0 +1,12 @@
+diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
+index 2aec68be77..5ca6623d5a 100644
+--- a/package/tinycbor/tinycbor.mk
++++ b/package/tinycbor/tinycbor.mk
+@@ -35,6 +35,7 @@ endef
+ define TINYCBOR_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TINYCBOR_MAKE_OPTS) -C $(@D) \
+ 		DESTDIR=$(STAGING_DIR) prefix=/usr install
++	$(INSTALL) -D $(@D)/src/tinycbor-version.h $(STAGING_DIR)/usr/include
+ endef
+ 
+ define TINYCBOR_INSTALL_TARGET_CMDS

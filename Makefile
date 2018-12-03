@@ -9,6 +9,9 @@ export BR2_EXTERNAL := $(CURDIR)
 
 DEV ?= rpi0
 
+include $(BOARD_DIR)/defconfig
+LINUX_DIR := $(BASE_DIR)/build/linux-$(BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION)
+
 ################################################################################
 # Buildroot
 ################################################################################
@@ -19,7 +22,7 @@ all menuconfig toolchain: $(BASE_DIR)/.config
 
 $(BASE_DIR)/.config:
 	$(MAKE) prep
-	
+
 .PHONY: prep
 prep: patch config-rpi0
 	$(MAKE) defconfig
@@ -41,12 +44,16 @@ config-%:
 
 ## Pass Makefile targets not defined here to buildroot
 %:
-	$(MAKE) O=$(BASE_DIR) BR2_DEFCONFIG=$(CURDIR)/configs/$(PLATFORM)/defconfig -C buildroot $*
+	$(MAKE) O=$(BASE_DIR) BR2_DEFCONFIG=$(BOARD_DIR)/defconfig -C buildroot $*
 
 .PHONY: clean-target
 clean-target:
 	rm -rf $(TARGET_DIR)
 	find $(BASE_DIR)/ -name ".stamp_target_installed" |xargs rm -rf
+
+.PHONY: diffconfig
+diffconfig:
+	$(LINUX_DIR)/scripts/diffconfig -m $(LINUX_DIR)/arch/arm/configs/bcmrpi_defconfig $(BOARD_DIR)/defconfig
 
 ################################################################################
 # Deployment

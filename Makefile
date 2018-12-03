@@ -87,3 +87,23 @@ upload:
 .PHONY: sys-upload
 sys-upload:
 	rsync -avzz -e "ssh -i $(SSH_KEY)" --chown=root:root --inplace $(BASE_DIR)/images/{MLO,u-boot.img,*.dtb,*.txt,zImage,bzImage}  root@$(DEV).local:/boot/
+
+################################################################################
+# Docker
+################################################################################
+
+DOCKER_USERNAME ?= seanstone
+DOCKER_IMAGE ?= cyrus
+.PHONY: image
+image:
+	mkdir -p $(CURDIR)/build/docker
+	docker build --pull --tag=$(DOCKER_USERNAME)/$(DOCKER_IMAGE):latest -f Dockerfile $(CURDIR)/build/docker
+	
+.PHONY: docker-%
+docker-%:
+	docker run --tty \
+		--mount=type=bind,source=$(shell pwd),destination=/home/builduser \
+		$(DOCKER_USERNAME)/$(DOCKER_IMAGE) make PLATFORM=rpi0 $*
+		
+.PHONY: docker
+docker: docker-all

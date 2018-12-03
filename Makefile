@@ -15,9 +15,13 @@ DEV ?= rpi0
 
 .PHONY: default
 default: all
-all menuconfig toolchain: | $(BASE_DIR)/.config
+all menuconfig toolchain: $(BASE_DIR)/.config
 
-$(BASE_DIR)/.config: patch
+$(BASE_DIR)/.config:
+	$(MAKE) prep
+	
+.PHONY: prep
+prep: patch config-rpi0
 	$(MAKE) defconfig
 
 ## Apply custom patches to Buildroot
@@ -31,7 +35,7 @@ patch:
 
 ## Initial setup for specific platform
 .PHONY: config-%
-config-%: patch
+config-%:
 	mkdir -p build
 	echo $* > $(CURDIR)/build/.platform
 

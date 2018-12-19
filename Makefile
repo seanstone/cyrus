@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 export CURDIR
-export PLATFORM ?= $(shell cat $(CURDIR)/build/.platform)
+export PLATFORM ?= rpi0
 BASE_DIR := $(CURDIR)/build/output-$(PLATFORM)
 TARGET_DIR := $(BASE_DIR)/target
 export BOARD_DIR := $(CURDIR)/configs/$(PLATFORM)
@@ -21,11 +21,10 @@ default: all
 all menuconfig toolchain: $(BASE_DIR)/.config
 
 $(BASE_DIR)/.config:
-	$(MAKE) prep
+	$(MAKE) defconfig
 
 .PHONY: prep
-prep: patch config-rpi0
-	$(MAKE) defconfig
+prep: patch
 
 ## Apply custom patches to Buildroot
 .PHONY: patch
@@ -35,12 +34,6 @@ patch:
 			patch -d buildroot -p1 < $$file; \
 		fi \
 	done
-
-## Initial setup for specific platform
-.PHONY: config-%
-config-%:
-	mkdir -p build
-	echo $* > $(CURDIR)/build/.platform
 
 ## Pass Makefile targets not defined here to buildroot
 %:
@@ -98,12 +91,12 @@ DOCKER_IMAGE ?= cyrus
 image:
 	mkdir -p $(CURDIR)/build/docker
 	docker build --pull --tag=$(DOCKER_USERNAME)/$(DOCKER_IMAGE):latest -f Dockerfile $(CURDIR)/build/docker
-	
+
 .PHONY: docker-%
 docker-%:
 	docker run --tty \
 		--mount=type=bind,source=$(shell pwd),destination=/home/builduser \
 		$(DOCKER_USERNAME)/$(DOCKER_IMAGE) make PLATFORM=rpi0 $*
-		
+
 .PHONY: docker
 docker: docker-all

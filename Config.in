@@ -1,3 +1,2 @@
 source "../package/raspberrypi-omxcam/Config.in"
-source "../package/python-picamera/Config.in"
 source "../package/libcbor/Config.in"

@@ -29,6 +29,7 @@ prep: patch
 ## Apply custom patches to Buildroot
 .PHONY: patch
 patch:
+	git submodule update --init
 	@ for file in patches/*; do \
 		if ! patch -d buildroot -Rf --dry-run --silent -p1 < $$file > /dev/null; then \
 			patch -d buildroot -p1 < $$file; \
